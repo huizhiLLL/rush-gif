@@ -69,9 +69,10 @@ function bindEventListeners() {
     canvas.addEventListener('mouseleave', handleMouseUp);
     
     // 触摸事件（移动端）
-    canvas.addEventListener('touchstart', handleTouchStart, { passive: false });
-    canvas.addEventListener('touchmove', handleTouchMove, { passive: false });
-    canvas.addEventListener('touchend', handleTouchEnd, { passive: false });
+    canvas.addEventListener('touchstart', handleTouchStart, { passive: false, capture: true });
+    canvas.addEventListener('touchmove', handleTouchMove, { passive: false, capture: true });
+    canvas.addEventListener('touchend', handleTouchEnd, { passive: false, capture: true });
+    canvas.addEventListener('touchcancel', handleTouchEnd, { passive: false, capture: true });
     
     // 下载按钮
     downloadBtn.addEventListener('click', downloadImage);
@@ -302,7 +303,10 @@ function handleMouseUp(event) {
 
 // 触摸事件处理
 function handleTouchStart(event) {
+    // 阻止默认行为，防止输入法弹出
     event.preventDefault();
+    event.stopPropagation();
+    
     if (!currentImage || !textContent.trim()) return;
     
     const touch = event.touches[0];
@@ -315,31 +319,44 @@ function handleTouchStart(event) {
         dragOffset.x = touchX - textX;
         dragOffset.y = touchY - textY;
         canvas.classList.add('dragging');
+        
+        // 阻止其他元素的触摸事件和焦点事件
+        event.stopImmediatePropagation();
+        
+        // 确保输入框失去焦点，防止输入法弹出
+        if (document.activeElement && document.activeElement.blur) {
+            document.activeElement.blur();
+        }
     }
 }
 
 function handleTouchMove(event) {
-    event.preventDefault();
-    if (!isDragging) return;
-    
-    const touch = event.touches[0];
-    const rect = canvas.getBoundingClientRect();
-    const touchX = touch.clientX - rect.left;
-    const touchY = touch.clientY - rect.top;
-    
-    textX = touchX - dragOffset.x;
-    textY = touchY - dragOffset.y;
-    
-    // 限制文字在画布范围内
-    textX = Math.max(0, Math.min(canvas.width, textX));
-    textY = Math.max(0, Math.min(canvas.height, textY));
-    
-    updateCanvas();
+    // 只有在拖拽时才阻止默认行为
+    if (isDragging) {
+        event.preventDefault();
+        event.stopPropagation();
+        
+        const touch = event.touches[0];
+        const rect = canvas.getBoundingClientRect();
+        const touchX = touch.clientX - rect.left;
+        const touchY = touch.clientY - rect.top;
+        
+        textX = touchX - dragOffset.x;
+        textY = touchY - dragOffset.y;
+        
+        // 限制文字在画布范围内
+        textX = Math.max(0, Math.min(canvas.width, textX));
+        textY = Math.max(0, Math.min(canvas.height, textY));
+        
+        updateCanvas();
+    }
 }
 
 function handleTouchEnd(event) {
-    event.preventDefault();
     if (isDragging) {
+        event.preventDefault();
+        event.stopPropagation();
+        
         isDragging = false;
         canvas.classList.remove('dragging');
     }
