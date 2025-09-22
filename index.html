@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>图片文字处理器</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- 标题栏 -->
+        <header class="header">
+            <h1>图片文字处理器</h1>
+        </header>
+
+        <!-- 图片上传区 -->
+        <section class="upload-section">
+            <input type="file" id="imageInput" accept="image/*" style="display: none;">
+            <button id="uploadBtn" class="upload-btn">选择图片</button>
+            <span id="fileName" class="file-name"></span>
+        </section>
+
+        <!-- 文字输入区 -->
+        <section class="text-section">
+            <div class="input-group">
+                <input type="text" id="textInput" placeholder="请输入要添加的文字" class="text-input">
+            </div>
+            <div class="size-control">
+                <label for="fontSizeSlider">字体大小：</label>
+                <input type="range" id="fontSizeSlider" min="12" max="100" value="30" class="slider">
+                <span id="fontSizeValue" class="font-size-value">30px</span>
+            </div>
+        </section>
+
+        <!-- 画布预览区 -->
+        <section class="canvas-section">
+            <div id="canvasContainer" class="canvas-container">
+                <canvas id="previewCanvas" class="preview-canvas"></canvas>
+                <div id="noImageMsg" class="no-image-msg">请先上传一张图片</div>
+            </div>
+        </section>
+
+        <!-- 操作按钮区 -->
+        <section class="action-section">
+            <button id="downloadBtn" class="download-btn" disabled>下载图片</button>
+        </section>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
