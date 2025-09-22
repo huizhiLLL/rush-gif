@@ -74,6 +74,14 @@ function bindEventListeners() {
     canvas.addEventListener('touchend', handleTouchEnd, { passive: false, capture: true });
     canvas.addEventListener('touchcancel', handleTouchEnd, { passive: false, capture: true });
     
+    // 防止画布上的任何触摸事件触发输入法
+    canvas.addEventListener('touchstart', function(e) {
+        // 如果不在文字区域，也要阻止默认行为
+        if (!isDragging) {
+            e.preventDefault();
+        }
+    }, { passive: false });
+    
     // 下载按钮
     downloadBtn.addEventListener('click', downloadImage);
 }
@@ -303,10 +311,6 @@ function handleMouseUp(event) {
 
 // 触摸事件处理
 function handleTouchStart(event) {
-    // 阻止默认行为，防止输入法弹出
-    event.preventDefault();
-    event.stopPropagation();
-    
     if (!currentImage || !textContent.trim()) return;
     
     const touch = event.touches[0];
@@ -315,13 +319,15 @@ function handleTouchStart(event) {
     const touchY = touch.clientY - rect.top;
     
     if (isPointInText(touchX, touchY)) {
+        // 只有在点击文字区域时才阻止默认行为
+        event.preventDefault();
+        event.stopPropagation();
+        event.stopImmediatePropagation();
+        
         isDragging = true;
         dragOffset.x = touchX - textX;
         dragOffset.y = touchY - textY;
         canvas.classList.add('dragging');
-        
-        // 阻止其他元素的触摸事件和焦点事件
-        event.stopImmediatePropagation();
         
         // 确保输入框失去焦点，防止输入法弹出
         if (document.activeElement && document.activeElement.blur) {
