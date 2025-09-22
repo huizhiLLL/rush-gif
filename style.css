@@ -9,7 +9,8 @@ body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     min-height: 100vh;
-    padding: 20px;
+    padding: 10px;
+    margin: 0;
 }
 
 .container {
@@ -26,20 +27,105 @@ body {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
     text-align: center;
-    padding: 30px 20px;
+    padding: 15px 20px;
 }
 
 .header h1 {
-    font-size: 2.5rem;
+    font-size: 1.8rem;
     font-weight: 700;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    margin: 0;
 }
 
-/* 图片上传区 */
-.upload-section {
-    padding: 30px;
-    text-align: center;
+/* 图片选择区 */
+.image-section {
+    padding: 15px 20px;
     border-bottom: 1px solid #eee;
+}
+
+/* 标签页切换 */
+.image-tabs {
+    display: flex;
+    margin-bottom: 15px;
+    border-bottom: 2px solid #e1e5e9;
+}
+
+.tab-btn {
+    background: none;
+    border: none;
+    padding: 8px 16px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #6c757d;
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.tab-btn.active {
+    color: #667eea;
+    border-bottom-color: #667eea;
+}
+
+.tab-btn:hover {
+    color: #667eea;
+}
+
+/* 预设图片网格 */
+.preset-images {
+    display: block;
+}
+
+.preset-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.preset-item {
+    position: relative;
+    cursor: pointer;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    background: white;
+    border: 2px solid #e1e5e9;
+    min-height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.preset-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    border-color: #667eea;
+}
+
+.preset-item.selected {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+    border: 3px solid #667eea;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.preset-item span {
+    display: block;
+    padding: 12px;
+    text-align: center;
+    font-weight: 600;
+    color: #333;
+    font-size: 0.9rem;
+}
+
+.preset-item.selected span {
+    color: white;
+}
+
+/* 上传图片区域 */
+.upload-images {
+    text-align: center;
 }
 
 .upload-btn {
@@ -73,20 +159,20 @@ body {
 
 /* 文字输入区 */
 .text-section {
-    padding: 30px;
+    padding: 15px 20px;
     border-bottom: 1px solid #eee;
 }
 
 .input-group {
-    margin-bottom: 25px;
+    margin-bottom: 15px;
 }
 
 .text-input {
     width: 100%;
-    padding: 15px 20px;
+    padding: 10px 15px;
     border: 2px solid #e1e5e9;
-    border-radius: 10px;
-    font-size: 1.1rem;
+    border-radius: 8px;
+    font-size: 1rem;
     transition: all 0.3s ease;
     background: #f8f9fa;
 }
@@ -101,14 +187,15 @@ body {
 .size-control {
     display: flex;
     align-items: center;
-    gap: 15px;
+    gap: 10px;
     flex-wrap: wrap;
 }
 
 .size-control label {
     font-weight: 600;
     color: #333;
-    min-width: 80px;
+    min-width: 70px;
+    font-size: 0.9rem;
 }
 
 .slider {
@@ -152,7 +239,7 @@ body {
 
 /* 画布预览区 */
 .canvas-section {
-    padding: 30px;
+    padding: 15px 20px;
     text-align: center;
 }
 
@@ -160,11 +247,12 @@ body {
     position: relative;
     display: inline-block;
     border: 2px solid #e1e5e9;
-    border-radius: 15px;
+    border-radius: 10px;
     overflow: hidden;
     background: #f8f9fa;
-    min-height: 300px;
-    min-width: 300px;
+    min-height: 200px;
+    min-width: 200px;
+    max-width: 100%;
 }
 
 .preview-canvas {
@@ -174,19 +262,10 @@ body {
     cursor: move;
 }
 
-.no-image-msg {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    color: #999;
-    font-size: 1.2rem;
-    pointer-events: none;
-}
 
 /* 操作按钮区 */
 .action-section {
-    padding: 30px;
+    padding: 15px 20px;
     text-align: center;
     background: #f8f9fa;
 }
@@ -195,9 +274,9 @@ body {
     background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
     color: white;
     border: none;
-    padding: 15px 40px;
-    border-radius: 50px;
-    font-size: 1.1rem;
+    padding: 12px 30px;
+    border-radius: 25px;
+    font-size: 1rem;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -223,26 +302,46 @@ body {
 /* 响应式设计 */
 @media (max-width: 768px) {
     body {
-        padding: 10px;
+        padding: 5px;
     }
     
     .header h1 {
-        font-size: 2rem;
+        font-size: 1.5rem;
     }
     
-    .header, .upload-section, .text-section, .canvas-section, .action-section {
-        padding: 20px;
+    .header, .image-section, .text-section, .canvas-section, .action-section {
+        padding: 10px 15px;
+    }
+    
+    .preset-grid {
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        gap: 8px;
+    }
+    
+    .preset-item {
+        min-height: 40px;
+    }
+    
+    .preset-item span {
+        padding: 10px;
+        font-size: 0.85rem;
+    }
+    
+    .tab-btn {
+        padding: 6px 12px;
+        font-size: 0.8rem;
     }
     
     .size-control {
         flex-direction: column;
         align-items: stretch;
-        gap: 10px;
+        gap: 8px;
     }
     
     .size-control label {
         min-width: auto;
         text-align: center;
+        font-size: 0.8rem;
     }
     
     .slider {
@@ -250,33 +349,48 @@ body {
     }
     
     .canvas-container {
-        min-height: 250px;
-        min-width: 250px;
+        min-height: 180px;
+        min-width: 180px;
     }
     
     .upload-btn, .download-btn {
         width: 100%;
-        padding: 18px 30px;
+        padding: 12px 20px;
+        font-size: 0.9rem;
     }
 }
 
 @media (max-width: 480px) {
     .header h1 {
-        font-size: 1.5rem;
+        font-size: 1.3rem;
     }
     
-    .header, .upload-section, .text-section, .canvas-section, .action-section {
-        padding: 15px;
+    .header, .image-section, .text-section, .canvas-section, .action-section {
+        padding: 8px 12px;
+    }
+    
+    .preset-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 6px;
+    }
+    
+    .preset-item {
+        min-height: 35px;
+    }
+    
+    .preset-item span {
+        padding: 8px;
+        font-size: 0.8rem;
     }
     
     .canvas-container {
-        min-height: 200px;
-        min-width: 200px;
+        min-height: 150px;
+        min-width: 150px;
     }
     
     .text-input {
-        font-size: 1rem;
-        padding: 12px 15px;
+        font-size: 0.9rem;
+        padding: 8px 12px;
     }
 }
 

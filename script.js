@@ -17,8 +17,18 @@ const fontSizeSlider = document.getElementById('fontSizeSlider');
 const fontSizeValue = document.getElementById('fontSizeValue');
 const canvasContainer = document.getElementById('canvasContainer');
 const previewCanvas = document.getElementById('previewCanvas');
-const noImageMsg = document.getElementById('noImageMsg');
 const downloadBtn = document.getElementById('downloadBtn');
+
+// 标签页元素
+const presetTab = document.getElementById('presetTab');
+const uploadTab = document.getElementById('uploadTab');
+const presetImages = document.getElementById('presetImages');
+const uploadImages = document.getElementById('uploadImages');
+
+// 预设图片数据
+const presetImageData = {
+    rush: 'images/rush.jpg'
+};
 
 // 初始化
 document.addEventListener('DOMContentLoaded', function() {
@@ -34,6 +44,16 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // 绑定事件监听器
 function bindEventListeners() {
+    // 标签页切换
+    presetTab.addEventListener('click', () => switchTab('preset'));
+    uploadTab.addEventListener('click', () => switchTab('upload'));
+    
+    // 预设图片选择
+    const presetItems = document.querySelectorAll('.preset-item');
+    presetItems.forEach(item => {
+        item.addEventListener('click', () => handlePresetImageSelect(item));
+    });
+    
     // 图片上传
     uploadBtn.addEventListener('click', () => imageInput.click());
     imageInput.addEventListener('change', handleImageUpload);
@@ -59,16 +79,61 @@ function bindEventListeners() {
 
 // 初始化画布
 function initCanvas() {
-    canvas.width = 400;
-    canvas.height = 300;
+    canvas.width = 300;
+    canvas.height = 200;
     ctx.fillStyle = '#f8f9fa';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     
     // 绘制提示文字
     ctx.fillStyle = '#999';
-    ctx.font = '16px Arial';
+    ctx.font = '14px Arial';
     ctx.textAlign = 'center';
     ctx.fillText('请先上传一张图片', canvas.width / 2, canvas.height / 2);
+}
+
+// 标签页切换
+function switchTab(tab) {
+    if (tab === 'preset') {
+        presetTab.classList.add('active');
+        uploadTab.classList.remove('active');
+        presetImages.style.display = 'block';
+        uploadImages.style.display = 'none';
+    } else {
+        uploadTab.classList.add('active');
+        presetTab.classList.remove('active');
+        presetImages.style.display = 'none';
+        uploadImages.style.display = 'block';
+    }
+}
+
+// 处理预设图片选择
+function handlePresetImageSelect(item) {
+    // 移除其他选中状态
+    document.querySelectorAll('.preset-item').forEach(el => {
+        el.classList.remove('selected');
+    });
+    
+    // 添加选中状态
+    item.classList.add('selected');
+    
+    // 获取图片ID
+    const imageId = item.getAttribute('data-image');
+    const imagePath = presetImageData[imageId];
+    
+    if (imagePath) {
+        // 加载预设图片
+        const img = new Image();
+        img.onload = function() {
+            currentImage = img;
+            setupCanvas();
+            updateCanvas();
+            updateDownloadButton();
+            
+            // 清空文件名显示
+            fileName.textContent = '';
+        };
+        img.src = imagePath;
+    }
 }
 
 // 处理图片上传
@@ -84,6 +149,11 @@ function handleImageUpload(event) {
     
     // 显示文件名
     fileName.textContent = file.name;
+    
+    // 移除预设图片选中状态
+    document.querySelectorAll('.preset-item').forEach(el => {
+        el.classList.remove('selected');
+    });
     
     // 加载图片
     const reader = new FileReader();
@@ -104,8 +174,8 @@ function handleImageUpload(event) {
 function setupCanvas() {
     if (!currentImage) return;
     
-    // 计算合适的画布尺寸（保持比例，最大宽度800px）
-    const maxWidth = Math.min(800, window.innerWidth - 100);
+    // 计算合适的画布尺寸（保持比例，最大宽度400px）
+    const maxWidth = Math.min(400, window.innerWidth - 80);
     const aspectRatio = currentImage.width / currentImage.height;
     
     let canvasWidth, canvasHeight;
@@ -118,15 +188,22 @@ function setupCanvas() {
         canvasHeight = currentImage.height;
     }
     
+    // 确保画布不会太小
+    if (canvasWidth < 200) {
+        canvasWidth = 200;
+        canvasHeight = 200 / aspectRatio;
+    }
+    if (canvasHeight < 150) {
+        canvasHeight = 150;
+        canvasWidth = 150 * aspectRatio;
+    }
+    
     canvas.width = canvasWidth;
     canvas.height = canvasHeight;
     
     // 设置文字初始位置为画布中央
     textX = canvasWidth / 2;
     textY = canvasHeight / 2;
-    
-    // 隐藏提示信息
-    noImageMsg.style.display = 'none';
 }
 
 // 更新画布

@@ -3,21 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>图片文字处理器</title>
+    <title>GoodRush</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
         <!-- 标题栏 -->
         <header class="header">
-            <h1>图片文字处理器</h1>
+            <h1>GoodRush</h1>
         </header>
 
-        <!-- 图片上传区 -->
-        <section class="upload-section">
-            <input type="file" id="imageInput" accept="image/*" style="display: none;">
-            <button id="uploadBtn" class="upload-btn">选择图片</button>
-            <span id="fileName" class="file-name"></span>
+        <!-- 图片选择区 -->
+        <section class="image-section">
+            <div class="image-tabs">
+                <button id="presetTab" class="tab-btn active">预设图片</button>
+                <button id="uploadTab" class="tab-btn">上传图片</button>
+            </div>
+            
+            <!-- 预设图片区域 -->
+            <div id="presetImages" class="preset-images">
+                <div class="preset-grid">
+                    <div class="preset-item" data-image="rush">
+                        <span>Rush背景</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 上传图片区域 -->
+            <div id="uploadImages" class="upload-images" style="display: none;">
+                <input type="file" id="imageInput" accept="image/*" style="display: none;">
+                <button id="uploadBtn" class="upload-btn">选择图片</button>
+                <span id="fileName" class="file-name"></span>
+            </div>
         </section>
 
         <!-- 文字输入区 -->
@@ -36,7 +53,6 @@
         <section class="canvas-section">
             <div id="canvasContainer" class="canvas-container">
                 <canvas id="previewCanvas" class="preview-canvas"></canvas>
-                <div id="noImageMsg" class="no-image-msg">请先上传一张图片</div>
             </div>
         </section>
 
